@@ -1,6 +1,6 @@
 ## php入门笔记
 
-[WAMPServer集成环境](http://www.wampserver.com/en/)
+[WampServer](http://www.wampserver.com/en/)集成环境
 
 php变量
 
