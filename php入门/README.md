@@ -1,9 +1,13 @@
 ## php入门笔记
 
-[WAMPServer集成环境]()
+[WAMPServer集成环境](http://www.wampserver.com/en/)
+
 php变量
+
 php常量
+
 php中常用的运算符
+
 语言结构语句
 
 ---
