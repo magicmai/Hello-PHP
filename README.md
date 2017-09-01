@@ -3,7 +3,7 @@
 >目标： 看懂 php 代码
 
 
-# 入门：
+# 入门
 
 [练习代码](https://github.com/magicmai/php/tree/master/php%E5%85%A5%E9%97%A8)
 
