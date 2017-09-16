@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 提示操作信息的，并且跳转
  * @param string $mes

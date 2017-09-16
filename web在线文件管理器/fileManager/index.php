@@ -81,6 +81,29 @@ eof;
 		$mes = '文件修改失败';
 	}
 	alertMes($mes, $redirect);
+} elseif ($act == 'renameFile') {
+	// 完成重命名
+	$str = <<<EOF
+	<form action="index.php?act=doRename" method="post">
+		请填写新文件名：<input type="text" name="newname" placeholder="重命名">
+		<input type="hidden" name="filename" value="{$filename}">
+		<input type="submit" value="重命名">
+	</form>
+EOF;
+	echo $str;
+} elseif ($act == 'doRename') {
+	// 实现重命名的操作
+	$newname = @$_REQUEST['newname'];
+	$mes = renameFile($filename, $newname);
+	alertMes($mes, $redirect);
+} elseif ($act == 'delFile') {
+	// 删除文件操作
+	//echo '删除文件操作';
+	$mes = delFile($filename);
+	alertMes($mes, $redirect);
+} elseif ($act == 'downFile') {
+	// 下载文件
+	$mes = downFile($filename);
 }
 
 ?>
@@ -92,13 +115,44 @@ eof;
 	<title>在线文件管理器</title>
 	<link rel="stylesheet" href="cikonss.css">
 	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.css"  type="text/css"/>
+	<script src="jquery-ui/js/jquery-1.10.2.js"></script>
+	<script src="jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
+	<script src="jquery-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
 	<script>
 		function show (dis) {
 			document.getElementById(dis).style.display = 'block';
 		}
+
+		function delFile(filename) {
+			if (confirm('确定要删除此文件吗？')) {
+				location.href = 'index.php?act=delFile&filename=' + filename;
+			}
+		}
+
+		// 弹出图片
+		function showDetail(t, filename) {
+			console.log('ok');
+			$('#showImg').attr('src', filename);
+			$('#showDetail').dialog({
+				height: 'auto',
+				width: 'auto',
+				position: {my: 'center', at: 'center', collision: 'fit'},
+				modal: false,    // 是否模式对话框
+				draggable: true, // 是否允许拖拽
+				resizable: true, // 是否允许拖动
+				title: t,        // 对话框标题
+				show: 'slide',
+				hide: 'explode'
+			});
+		}
 	</script>
 </head>
 <body>
+<div id="showDetail" style="display: none;">
+	<img id="showImg" src="" alt="">
+</div>
+
 <h1>慕课网——在线文件管理</h1>
 
 <div id="top">
@@ -183,12 +237,34 @@ eof;
 				<td><?php echo date('Y-m-d H:m:s', filemtime($p));?></td>
 				<td><?php echo date('Y-m-d H:m:s', fileatime($p));?></td>
 				<td>
-					<a href="index.php?act=showContent&filename=<?php echo $p;?>"><img class="small" src="images/show.png"  alt="" title="查看"/></a>|
+<!-- 查看 -->
+				<?php 
+					// 得到文件扩展名
+					$ext_name = explode('.', $val);
+					$ext = strtolower(end($ext_name));
+					$imageRxt = array('gif', 'jpg', 'jpeg', 'png');
+					if (in_array($ext, $imageRxt)) {
+				?>
+						<a href="#" onclick="showDetail('<?php echo $val;?>', '<?php echo $p;?>')"><img class="small" src="images/show.png"  alt="" title="查看"/></a>|
+				<?php 
+					} else {
+				?>
+						<a href="index.php?act=showContent&filename=<?php echo $p;?>"><img class="small" src="images/show.png"  alt="" title="查看"/></a>|
+				<?php
+					}
+				?>
+<!-- 修改 -->
 					<a href="index.php?act=editContent&filename=<?php echo $p;?>"><img class="small" src="images/edit.png"  alt="" title="修改"/></a>|
-					<a href="index.php?act=renameFolder&path=<?php echo $path;?>&dirname=<?php echo $p;?>"><img class="small" src="images/rename.png"  alt="" title="重命名"/></a>|
+<!-- 重命名 -->
+					<a href="index.php?act=renameFile&filename=<?php echo $p;?>"><img class="small" src="images/rename.png"  alt="" title="重命名"/></a>|
+
+
 					<a href="index.php?act=copyFolder&path=<?php echo $path;?>&dirname=<?php echo $p;?>"><img class="small" src="images/copy.png"  alt="" title="复制"/></a>|
 					<a href="index.php?act=cutFolder&path=<?php echo $path;?>&dirname=<?php echo $p;?>"><img class="small" src="images/cut.png"  alt="" title="剪切"/></a>|
-					<a href="#"  onclick="delFolder('<?php echo $p;?>','<?php echo $path;?>')"><img class="small" src="images/delete.png"  alt="" title="删除"/></a>|
+<!-- 删除文件 -->					
+					<a href="#" onclick="delFile('<?php echo $p;?>')"><img class="small" src="images/delete.png" alt="" title="删除"/></a>|
+<!-- 下载文件 -->
+					<a href="index.php?act=downFile&filename=<?php echo $p;?>"><img class="small" src="images/download.png" alt="" title="下载"/></a>
 				</td>
 			</tr>
 	<?php
