@@ -8,6 +8,7 @@
 //打开指定目录
 function readDirectory ($path) {
 	$handle = opendir($path);
+	$arr = array();
 	// if (($item = readdir($handle)) !== false) {
 	while (($item = readdir($handle)) !== false) {
 		//.和..这两个特殊目录
@@ -20,9 +21,7 @@ function readDirectory ($path) {
 			}
 		}
 	}
-	// else {
-	// 	$arr = null;
-	// }
+
 	closedir($handle);
 	return $arr;
 }
@@ -35,7 +34,6 @@ function readDirectory ($path) {
  * @param string $path
  * @return number
  */
-
 function dirSize($path) {
 	$sum = 0;
 	global $sum; // 定义全局变量
@@ -56,6 +54,30 @@ function dirSize($path) {
 }
 // $path = 'file';
 // echo dirSize($path);
+
+/**
+ * 创建文件夹
+ * @param string $dirname
+ * @return string
+ */
+function createFolder($dirname) {
+	//检测文件夹名称的合法性
+	if (checkFilename(basename($dirname))) {
+		//当前目录下是否存在同名文件夹名称
+		if (!file_exists($dirname)){
+			if (mkdir($dirname, 0777, true)) {
+				$mes = "文件夹创建成功";
+			} else {
+				$mes = "文件夹创建失败";
+			}
+		} else {
+			$mes = "存在相同文件夹名称";
+		}
+	} else {
+		$mes = "非法文件夹名称";
+	}
+	return $mes;
+}
 
 /**
  * 重命名文件夹

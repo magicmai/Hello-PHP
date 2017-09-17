@@ -32,18 +32,17 @@ $info = readDirectory($path);
 //print_r($info);
 //var_dump($info);exit; //没有文件或目录时返回 null
 if (!$info) {
-	echo '<script>alert("改目录下没有内容！"); location.href = "index.php";</script>';
+	echo '<script>alert("该目录下没有内容！"); location.href = "index.php";</script>';
 }
 $redirect = "index.php?path={$path}";
 
-if ($act == 'createFile') {
-// 创建文件
+if ($act == 'createFile') {                          /* 新建文件 */
 	// echo $path, '--';
 	// echo $filename;
 	$mes = createFile($path.'/'.$filename);
 	alertMes($mes, $redirect);
-} elseif ($act == 'showContent') {
-// 查看文件内容
+
+} elseif ($act == 'showContent') {                   /* 查看文件 */
 	$content = file_get_contents($filename);
 	// echo "<textarea readonly='readonly' cols='100 rows='10'>{$content}</textarea>";
 	// 高亮显示 PHP 代码：
@@ -62,9 +61,9 @@ eof;
 		echo $str;
 	} else {
 		alertMes('文件内容为空，请编辑后在查看', $redirect);
-	}	
-} elseif ($act == 'editContent') {
-// 修改文件内容
+	}
+
+} elseif ($act == 'editContent') {                   /* 修改文件 */
 	// echo '编辑文件';
 	$content = file_get_contents($filename);
 	// echo $content;
@@ -77,8 +76,8 @@ eof;
 	</form>
 eof;
 	echo $str;
+
 } elseif ($act == 'doEdit') {
-// 修改文件内容的操作
 	$content = @$_REQUEST['content'];
 	// echo $content;
 	if (file_put_contents($filename, $content)) {
@@ -87,8 +86,8 @@ eof;
 		$mes = '文件修改失败';
 	}
 	alertMes($mes, $redirect);
-} elseif ($act == 'renameFile') {
-// 完成重命名
+
+} elseif ($act == 'renameFile') {                   /* 重命名文件 */
 	$str = <<<EOF
 	<form action="index.php?act=doRename" method="post">
 		请填写新文件名：<input type="text" name="newname" placeholder="重命名">
@@ -98,23 +97,25 @@ eof;
 	</form>
 EOF;
 	echo $str;
+
 } elseif ($act == 'doRename') {
-// 实现重命名的操作
 	$newname = @$_REQUEST['newname'];
 	$mes = renameFile($filename, $newname);
 	alertMes($mes, $redirect);
 
-} elseif ($act == 'delFile') {
-// 删除文件操作
+} elseif ($act == 'delFile') {                   /* 删除文件 */
 	//echo '删除文件操作';
 	$mes = delFile($filename);
 	alertMes($mes, $redirect);
 
-} elseif ($act == 'downFile') {
-// 下载文件
+} elseif ($act == 'downFile') {                   /* 下载文件 */
 	$mes = downFile($filename);
 
-} elseif ($act == 'copyFolder') {
+} elseif ($act == '创建文件夹') {	                 /* 创建文件夹 */
+	$mes = createFolder($path."/".$dirname);
+	alertMes($mes, $redirect);
+
+} elseif ($act == 'copyFolder') {                   /* 复制文件夹 */
 	$str = <<<EOF
 	<form action="index.php?act=doCopyFolder" method="post">
 		将文件夹复制到：<input type="text" name="dstname" placeholder="将文件夹复制到">
@@ -124,11 +125,14 @@ EOF;
 	</form>
 EOF;
 	echo $str;
+
 } elseif ($act == 'doCopyFolder') {
 	$dstname = @$_REQUEST['dstname'];
 	$mes = copyFolder($dirname, $path.'/'.$dstname.'/'.basename($dirname));
+	echo $mes;
 	// alertMes($mes, $redirect);
-} elseif ($act == 'renameFolder') {
+	
+} elseif ($act == 'renameFolder') {                 /* 重命名文件夹 */
 	// echo $dirname;
 	$str = <<<EOF
 	<form action="index.php?act=doRenameFolder" method="post">
@@ -146,7 +150,7 @@ EOF;
 	$mes = renameFolder($dirname, $path.'/'.$newname);
 	echo $mes;
 
-} elseif ($act == 'cutFolder') {
+} elseif ($act == 'cutFolder') {                   /* 剪切文件夹 */
 	$str = <<<EOF
 	<form action="index.php?act=doCutFolder" method="post">
 		将文件夹剪切到：<input type="text" name="dstname" placeholder="剪切到">
@@ -162,12 +166,15 @@ EOF;
 	$dstname = @$_REQUEST['dstname'];
 	$mes = cutFolder($dirname, $path.'/'.$dstname);
 	echo $mes;
-} elseif ($act == 'delFolder') {
+	// alertMes($mes, $redirect);
+
+} elseif ($act == 'delFolder') {                   /* 删除文件夹 */
 	// 完成删除文件夹操作
 	// echo '文件夹被删除';
 	$mes = delFolder($dirname);
 	alertMes($mes, $redirect);
-} elseif ($act == 'copyFile') {
+
+} elseif ($act == 'copyFile') {                   /* 复制文件 */
 	$str = <<<EOF
 	<form action="index.php?act=doCopyFile" method="post">
 		将文件复制到：<input type="text" name="dstname" placeholder="复制到">
@@ -177,14 +184,14 @@ EOF;
 	</form>
 EOF;
 	echo $str;
+
 } elseif ($act == 'doCopyFile') {
 	$dstname = @$_REQUEST['dstname'];
 	$mes = copyFile($filename, $path.'/'.$dstname);
-	echo $mes;
-	// alertMes($mes, $redirect);
+	// echo $mes;
+	alertMes($mes, $redirect);
 	
-} elseif ($act == 'cutFile') {
-	// 剪切文件
+} elseif ($act == 'cutFile') {                   /* 剪切文件 */
 	$str = <<<EOF
 	<form action="index.php?act=doCutFile" method="post">
 		将文件剪切到：<input type="text" name="dstname" placeholder="剪切到">
@@ -194,11 +201,20 @@ EOF;
 	</form>
 EOF;
 	echo $str;
+
 } elseif ($act == 'doCutFile') {
 	$dstname = @$_REQUEST['dstname'];
 	$mes = cutFile($filename, $path.'/'.$dstname);
 	echo $mes;
 	// alertMes($mes, $redirect);
+	
+} elseif ($act == '上传文件') {                   /* 上传文件 */
+	// print_r($_FILES);
+	// Array ( [myFile] => Array ( [name] => updown1.txt [type] => text/plain [tmp_name] => D:\wamp\tmp\php165F.tmp [error] => 0 [size] => 13 ) )
+	$fileInfo = $_FILES['myFile'];
+	$mes = uploadFile($fileInfo, $path);
+	// echo $mes;
+	alertMes($mes, $redirect);
 }
 
 ?>
@@ -208,72 +224,38 @@ EOF;
 <head>
 	<meta charset="UTF-8">
 	<title>在线文件管理器</title>
-	<link rel="stylesheet" href="cikonss.css">
-	<link rel="stylesheet" href="main.css">
-	<link rel="stylesheet" href="jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.css"  type="text/css"/>
-	<script src="jquery-ui/js/jquery-1.10.2.js"></script>
-	<script src="jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
-	<script src="jquery-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
-	<script>
-		function show (dis) {
-			document.getElementById(dis).style.display = 'block';
-		}
-
-		function delFile(filename) {
-			if (confirm('确定要删除此文件吗？')) {
-				location.href = 'index.php?act=delFile&filename=' + filename;
-			}
-		}
-
-		// 弹出图片
-		function showDetail(t, filename) {
-			console.log('ok');
-			$('#showImg').attr('src', filename);
-			$('#showDetail').dialog({
-				height: 'auto',
-				width: 'auto',
-				position: {my: 'center', at: 'center', collision: 'fit'},
-				modal: false,    // 是否模式对话框
-				draggable: true, // 是否允许拖拽
-				resizable: true, // 是否允许拖动
-				title: t,        // 对话框标题
-				show: 'slide',
-				hide: 'explode'
-			});
-		}
-		function goBack($back) {
-			console.log('$back', $back);
-			// location.href = 'index.php?path=' + $back;
-			location.href = 'index.php?path=file';
-		}
-		function delFolder(dirname, path) {
-			console.log('dirname: ', dirname, 'path: ',path);
-			if (confirm('确定删除此文件夹吗？')) {
-				location.href = 'index.php?act=delFolder&dirname=' + dirname + '&path=' + path;
-			}
-		}
-	</script>
+	<link rel="stylesheet" href="css/cikonss.css">
+	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.10.4.custom.css"  type="text/css"/>
+	<link rel="stylesheet" href="css/main.css">
+	<script src="js/jquery-1.10.2.js"></script>
+	<script src="js/jquery-ui-1.10.4.custom.js"></script>
+	<script src="js/jquery-ui-1.10.4.custom.min.js"></script>
+	<script src="js/main.js"></script>
 </head>
 <body>
 <div id="showDetail" style="display: none;">
 	<img id="showImg" src="" alt="">
 </div>
 
-<h1>慕课网——在线文件管理</h1>
+<h1 style="text-align: center;">慕课网——在线文件管理</h1>
 
 <div id="top">
 	<ul id="navi">
+<!-- Home -->
 		<li>
 			<a href="index.php" title="主目录"><span class="icon icon-small icon-square"><span class="icon-home"></span></span></a>
 		</li>
+<!-- 新建文件 -->
 		<li>
 			<a href="#" title="新建文件" onclick="show('createFile')"><span class="icon icon-small icon-square"><span class="icon-file"></span></span></a>
 		</li>
+<!-- 新建文件夹 -->
 		<li>
-			<a href="#" title="新建文件夹"><span class="icon icon-small icon-square"><span class="icon-folder"></span></span></a>
+			<a href="#" title="新建文件夹" onclick="show('createFolder')"><span class="icon icon-small icon-square"><span class="icon-folder"></span></span></a>
 		</li>
+<!-- 上传文件 -->
 		<li>
-			<a href="#" title="上传文件"><span class="icon icon-small icon-square"><span class="icon-upload"></span></span></a>
+			<a href="#" title="上传文件" onclick="show('uploadFile')"><span class="icon icon-small icon-square"><span class="icon-upload"></span></span></a>
 		</li>
 <!-- 返回上级目录 -->
 		<?php
@@ -286,17 +268,8 @@ EOF;
 	</ul>
 </div>
 
-<form action="index.php" method="post">
+<form action="index.php" method="post" enctype="multipart/form-data">
 <table border="1">
-	<tr id="createFolder"  style="display: none;">
-		<td>请输入文件夹名称</td>
-		<td>
-			<input type="text" name="dirname" />
-			<input type="hidden" name="path"  value="<?php echo $path;?>" />
-			<input type="submit"  name="act"  value="创建文件夹" />
-		</td>
-	</tr>
-
 <!-- 新建文件 -->
 	<tr id="createFile"  style="display:none;">
 		<td>请输入文件名称</td>
@@ -307,7 +280,16 @@ EOF;
 			<input type="submit" value="创建文件" />	
 		</td>
 	</tr>
-
+<!-- 新建文件夹 -->
+	<tr id="createFolder"  style="display: none;">
+		<td>请输入文件夹名称</td>
+		<td>
+			<input type="text" name="dirname" />
+			<input type="hidden" name="path"  value="<?php echo $path;?>" />
+			<input type="submit"  name="act"  value="创建文件夹" />
+		</td>
+	</tr>
+<!-- 上传文件 -->
 	<tr id="uploadFile" style="display:none;">
 		<td>请选择要上传的文件</td>
 		<td>
