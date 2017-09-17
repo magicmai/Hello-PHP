@@ -112,3 +112,47 @@ function downFile($filename) {
 	header('content-length:' . filesize($filename));
 	readfile($filename);
 }
+
+/**
+ * 复制文件
+ * @param string $filename, $dstname
+ * @return string
+ */
+function copyFile($filename, $dstname) {
+	if (file_exists($dstname)) {
+		if (!file_exists($dstname.'/'.basename($filename))) {
+			if (copy($filename, $dstname.'/'.basename($filename))) {
+				$mes = '文件复制成功';
+			} else {
+				$mes = '文件复制失败';
+			}
+		} else {
+			$mes = '存在同名文件';
+		}
+	} else {
+		$mes = '目标目录不存在';
+	}
+	return $mes;
+}
+
+/**
+ * 剪切文件
+ * @param string $filename, $dstname
+ * @return string
+ */
+function cutFile($filename, $dstname) {
+	if (file_exists($dstname)) {
+		if (!file_exists($dstname.'/'.basename($filename))) {
+			if (rename($filename, $dstname.'/'.basename($filename))) {
+				$mes = '文件剪切成功';
+			} else {
+				$mes = '文件剪切失败';
+			}
+		} else {
+			$mes = '存在同名文件';
+		}
+	} else {
+		$mes = '目标目录不存在';
+	}
+	return $mes;
+}
