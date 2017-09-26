@@ -1,7 +1,8 @@
 <?php 
 
 require_once('connect.php');
-$sql = "SELECT * FROM article ORDER BY dateline desc";
+$key = $_GET['key'];
+$sql = "SELECT * FROM article WHERE title LIKE '$key%' ORDER BY dateline desc";
 $query = mysqli_query($con, $sql);
 if ($query && mysqli_num_rows($query)) {
 	while($row = mysqli_fetch_assoc($query)) {
@@ -79,8 +80,8 @@ if ($query && mysqli_num_rows($query)) {
 				<h2><b class="text1">Search</b></h2>
 				<form method="get" action="article.search.php">
 					<fieldset>
-						<input type="text" id="s" name="key" value="" />
-						<input type="submit" id="x" value="Search" />
+					<input type="text" id="s" name="key" value="" />
+					<input type="submit" id="x" value="Search" />
 					</fieldset>
 				</form>
 			</li>
