@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Json 实战（1）</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<script src="jquery3.2.1.min.js"></script>
+</head>
+
+<body>
+	<div>
+		<label>用户名：<input type="text" name="username" id="username"></label>
+		<br>
+		<label>会员组：<input type="text" name="groupname" id="groupname"></label>
+		<br>
+		<label>UID：<input type="text" name="uid" id="uid"></label>
+	</div>
+
+
+	<script>
+		$(document).ready(function () {
+			var url = "server.php?inAjax=1&do=checkMember&username=magic";
+			var data = {};
+			$.get(url, data, function (res) {
+				console.log(res);
+				var jsonObj = eval("(" + res + ")");
+				console.log(jsonObj);
+
+				$('#username').val(jsonObj.username);
+				$('#groupname').val(jsonObj.groupname);
+				$('#groupname').val(jsonObj.groupname);
+				$('#uid').val(jsonObj.uid);
+
+			});
+		});
+	</script>
+</body>
+</html>

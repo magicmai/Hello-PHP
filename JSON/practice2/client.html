@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JSON 实战（2）</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<script src="jquery3.2.1.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			var url = 'server.php';
+			var data = {'do': 'first'};
+
+			$.getJSON(url, data, function (res) {
+				$('#username').val(res.username);
+				$('#password').val(res.password);
+			});
+
+			var data = {'do': 'second'};
+			$.getJSON(url, data, function (res) {
+				// $('#members').val(res[1].username);
+				$('#members').val(res.third.username);
+			});
+
+			var data = {'do': 'third'};
+			$.getJSON(url, data, function (res) {
+				$('#address').val(res.address[1].username);  // 数字索引要用 []
+				// $('#members').val(res.third.username);
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<h2>一维数组巩固练习</h2>
+	<div>
+		<label for="">用户名：
+			<input type="text" name="username" id="username">
+		</label>
+		<br>
+		<label for="">密码：
+			<input type="password" name="password" id="password">
+		</label>
+	</div>
+
+	<h2>多维数组实战（展示一组会员信息）</h2>
+	<textarea name="" id="members" cols="30" rows="1">
+		
+	</textarea>
+
+	<h2>对象实战（放一组地址信息）</h2>
+	<textarea name="" id="address" cols="30" rows="1">
+
+	</textarea>
+
+
+	
+</body>
+</html>
