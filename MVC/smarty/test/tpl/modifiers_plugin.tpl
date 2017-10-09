@@ -1,0 +1,1 @@
+{$time|test1: 'Y-m-d H:m:s'}
