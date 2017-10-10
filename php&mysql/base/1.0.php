@@ -13,11 +13,12 @@ mysqli_connect
 返回值：1、连接成功 --> mysql连接标识符
         2、连接失败 --> false
 *********************************************/
-// if ($con = mysqli_connect('localhost', 'root', '')) {
-// 	echo '连接成功！！';
-// } else {
-// 	echo '连接失败！！';
-// }
+if ($con = mysqli_connect('localhost', 'root', '')) {
+	print_r($con);
+	echo '连接成功！！';
+} else {
+	echo '连接失败！！';
+}
 /**********************************
 报错：Deprecated: mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead
 解决：mysql_connect('localhost', 'root', '') 改为 mysqli_connect('localhost', 'root', '')
@@ -46,10 +47,31 @@ mysqli_query
 参  数：sql命令（，mysql连接标识符，可选）
 返回值：1、执行成功，目前已知的是 insert 成功 --> true
         2、执行失败 --> false
+
 ***************************************************/
+mysqli_query($con, 'set names utf8');  // 查询前，设置字符集！
 $res = mysqli_query($con, "SELECT * FROM test");
-$row = mysqli_fetch_array($res);
-var_dump($row);
+// $row = mysqli_fetch_array($res);
+// var_dump($row);
+
+
+
+// 获取指定的某行的某一列上的一个数据
+echo "<br>";
+echo "<br>";
+echo "<br>";
+function findResult($res, $row = 0, $field = 0) {
+	$rsArr = [];
+	while($arr = mysqli_fetch_array($res, MYSQL_NUM)) {
+		array_push($rsArr, $arr);
+	}
+	print_r($rsArr);
+	echo "<br>";
+	// print_r($rsArr[1][1]);
+	print_r($rsArr[$row][$field]);
+}
+findResult($res, 1, 1);  // '芒果'
+
 
 
 /*************************************query插入数据
@@ -65,27 +87,27 @@ if (mysqli_query($con, $ins)) {
 }
 **************************************************/
 
-$id = 1;
-$name = '荔枝';
-// 注意正确使用单双引号！
-$sql = "INSERT INTO test (id, name) VALUES ('$id', '$name')";  
+// $id = 1;
+// $name = '荔枝';
+// // 注意正确使用单双引号！
+// $sql = "INSERT INTO test (id, name) VALUES ('$id', '$name')";  
 
-mysqli_query($con, 'set names utf8');
+// mysqli_query($con, 'set names utf8');
 
-if (mysqli_query($con, $sql)) {	
-	echo '数据插入成功！！';
-} else {
+// if (mysqli_query($con, $sql)) {	
+// 	echo '数据插入成功！！';
+// } else {
 	/******************************************mysql错误
 	mysqli_error
 	作  用：返回上一个MySQL操作产生的文本错误信息
 	参  数：（可选mysql连接标识符）
 	返回值：1、返回上一个MySQL操作产生的文本错误信息
 	***************************************************/
-	echo mysqli_error($con);
-	echo '数据插入失败！！';
-}
-$uid = mysqli_insert_id($con);
-echo $uid;                        /*0？？？？？？？？？？？*/
+// 	echo mysqli_error($con);
+// 	echo '数据插入失败！！';
+// }
+// $uid = mysqli_insert_id($con);
+// echo $uid;                        /*0？？？？？？？？？？？*/
 
 
 

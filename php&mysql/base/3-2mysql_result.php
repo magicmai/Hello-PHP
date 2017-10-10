@@ -14,5 +14,7 @@ $res = mysqli_query($con, "SELECT COUNT(*) FROM fruitshop");
 //$arr = mysqli_fetch_row($res);
 // echo $arr[0];  // 4
 
-// echo mysqli_result($res, 2, 'name');  
-//mysqli 扩展中没有这个函数
+
+
+// echo mysql_result($res, 2, 'name');  
+//mysqli 扩展中没有这个函数！
