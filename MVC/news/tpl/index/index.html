@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>MVC综合实例</title>
+	<link rel="stylesheet" href="img/css/main.css">
+</head>
+
+<body>
+	<header>
+		<h1>新闻发布系统</h1>
+		<p>MVC综合实例——微型框架的实际运用</p>
+	</header>
+
+	<div class="container">
+
+		<div class="fleft">
+
+			{foreach $data as $news}
+			<div class="item">
+				<p class="meta">{$news.author}发布于<span class="date">{$news.dateline}</span></p>
+				<h1 id="title"><a href="index.php?controller=index&method=newsshow&id={$news.id}">{$news.title}</a></h1>
+				<p class="content">{$news.content}</p>
+			</div>
+			{/foreach}
+
+		</div>
+
+		<div class="fright">
+			<h4 style="color: green;">关于我们</h4>
+			<p class="about">
+				{$about}
+			</p>
+		</div>
+
+	</div>
+
+
+</body>
+
+</html>
