@@ -1,30 +1,12 @@
-# Hello! php
+## php 学习资料
 
->目标： 看懂 php 代码
+[PHP 手册](http://php.net/manual/zh/) | [PHP编程之道](https://phptherightway.golaravel.com/) | [PHP新特性](http://www.php7.site/book/php7/about-30.html)
 
+## 实战项目
 
-# 入门
-
-[练习代码](https://github.com/magicmai/php/tree/master/php%E5%85%A5%E9%97%A8)
-
-集成环境：[WampServer](http://www.wampserver.com/en/) 
-
-php变量
-
-php常量
-
-php中常用的运算符
-
-语言结构语句
-
----
-课程：[PHP入门篇](http://www.imooc.com/learn/54)
-
-
-# 进阶
-[练习代码(imooc)](http://www.imooc.com/u/4228249/course/26/codes)
-
-笔记：（笔记本4 p41~53）
-
----
-课程：[PHP进阶篇](http://www.imooc.com/learn/26)
+1. JSON
+2. MVC
+3. Object Oriented Programming
+4. Web File Manager
+5. php&mysql
+...
